@@ -21,7 +21,18 @@ toc: true
 
 ## Prelude [TODO remove h2]
 
-[TODO what is meant by ambient authority?]
+Recall the definition of capability from [ref]:
+
+> A capability is an unforgeable token that (a) designates an object and (b) gives the program the authority to perform a specific set of actions on that object.
+
+What gives our program the authority to access the network or the file system? It's the operating system that created the process running our program. We call this *ambient authority*.
+The operating system does not understand that our program is divided into objects which might require only a part of this authority.
+
+In order to handle our code (and that of others) more safely, and also to understand our code better, want to split this authority up and only grant the particular authority a piece of code actually
+requires.
+
+The ambient authority is represented as the `AmbientAuthority` object passed to the main actor
+as `env.root`.
 
 Here is a simple program that connects to example.com via TCP on port 80 and quits:
 
