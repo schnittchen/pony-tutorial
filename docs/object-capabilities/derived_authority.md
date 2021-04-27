@@ -61,12 +61,16 @@ actor Main
     try Connect(env.out, env.root as AmbientAuth) end
 ```
 
-* the main actor is passed the ambient authority as env.root. This is an unforgeable instance
-of the AmbientAuth primitive: no code outside the glue that creates the main actor can create
-it.
-* more specifically, the `env.root` field is of type `AmbientAuth | None`, so the actor must `try`
+By passing the ambient authority to the main actor, the glue code that creates it
+authorizes it to do certain things.
+We will see shortly how this authorization is required when interacting with the outside world.
+The `AmbientAuth` constructor is private, so that the instance can only be created by the glue
+itself.
+
+More specifically, the `env.root` field is of type `AmbientAuth | None`, so the actor must `try`
 to convert it by calling `env.root as AmbientAuth` [maybe discuss by None is possible here?]
-* the main actor then creates a `Connect` actor and passes the authority on. This second actor
+
+The main actor then creates a `Connect` actor and passes the authority on. This second actor
 uses it to create a TCPConnection. It is here that the authorization is effectively checked:
 
 ```
@@ -75,7 +79,7 @@ TCPConnection(auth, MyTCPConnectionNotify(out), "example.com", "80")
 
 The TCPConnection requires an authority as first parameter, and since the compiler checks that
 the correct type was passed, this guarantees that a TCPConnection can only be created by an
-actor holding the needed authorization. If you look into the implementation of the `TCPConnection`
+actor holding the required authorization. If you look into the implementation of the `TCPConnection`
 constructor, you will notice that the authorization is not even used beyond the declaration of the
 parameter.
 
