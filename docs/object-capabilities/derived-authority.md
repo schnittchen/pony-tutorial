@@ -89,11 +89,11 @@ requires.
 Imagine we don't trust the `Connect` actor, so we don't want to provide it with more authority
 than needed. For example, there is no point in granting it filesystem access.
 
-The `TCPConnection` constructor's first parameter is of the type
+The first parameter of the `TCPConnection` constructor has the type
 ```
 type TCPConnectionAuth is (AmbientAuth | NetAuth | TCPAuth | TCPConnectAuth)
 ```
-which looks like a nice hierarchy of authority, in order of decreasing privilege. We can pass
+This looks like a nice hierarchy of authority, in order of decreasing privilege. We can pass
 a reduced authority to our `Connect` actor like this:
 
 ```
