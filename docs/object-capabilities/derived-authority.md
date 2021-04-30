@@ -21,15 +21,18 @@ toc: true
 
 ## Prelude [TODO remove h2]
 
+Any interesting program will need to interact with the outside world through operating system concepts, like accessing the network or the file system, or creating and communicating with other programs.
+The operating system has given this right to the program at startup (but it might do some checks at runtime, for example controlling access to a file). This is called *ambient authority*.
+
+The operating system has no concept of how our program is composed inside, and it knows nothing about Pony specific concepts in particular. Pony requires operations which interact with the system
+to be authorized, and allows us to restrict and delegate this authority inside our program.
+
 Recall the definition of capability from [ref]:
 
 > A capability is an unforgeable token that (a) designates an object and (b) gives the program the authority to perform a specific set of actions on that object.
 
-What gives our program the authority to access the network or the file system? It's the operating system that created the process running our program. We call this *ambient authority*.
-The operating system does not understand that our program is divided into objects which might require only a part of this authority.
-
-The ambient authority is represented as the `AmbientAuthority` object passed to the main actor as `env.root`. Instead of allowing unfettered access to the outside world,
-Pony reifies the ambient authority and requires you to handle it explicitly.
+In Pony, the Main actor is passed the environment object, which keeps an `AmbientAuth` in the `root` field. This value is the capability that represents the ambient authority given to us by the system.
+Instead of allowing unfettered access to the outside world, Pony enforces the use of this authority.
 
 Here is a simple program that connects to example.com via TCP on port 80 and quits:
 
@@ -58,17 +61,10 @@ actor Main
     try Connect(env.out, env.root as AmbientAuth) end
 ```
 
-By passing the ambient authority to the main actor, the glue code that creates it
-authorizes it to do certain things.
-We will see shortly how this authorization is required when interacting with the outside world.
-The `AmbientAuth` constructor is private, so that the instance can only be created by the glue
-itself.
+The Main actor authorizes the Connect actor by passing the ambient authority token on to it. This token is not forgeable since the AmbientAuth constructor is private (only the runtime glue code
+can create the one and only instance).
 
-More specifically, the `env.root` field is of type `AmbientAuth | None`, so the actor must `try`
-to convert it by calling `env.root as AmbientAuth` [maybe discuss by None is possible here?]
-
-The main actor then creates a `Connect` actor and passes the authority on. This second actor
-uses it to create a TCPConnection. It is here that the authorization is effectively checked:
+The Connect actor uses this authority when it creates a TCP connection:
 
 ```
 TCPConnection(auth, MyTCPConnectionNotify(out), "example.com", "80")
