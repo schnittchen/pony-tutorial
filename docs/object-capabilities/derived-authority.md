@@ -104,6 +104,6 @@ You can see this pattern over and over in the standard library.
 Consider the above example again, but this time let's treat the `Connect` actor as coming from
 a 3rd party package. If the author of that package had not considered which authority exactly
 was necessary, it would not be possible to restrict the authoritization given to its code.
+A function with an `AmbientAuth` parameter will not accept a lesser auth token.
 
-[Is this true?]
-[What if I need Tcp + File access (but not UDP)? (demonstrate how to accomplish that)]
+Therefore it is necessary to design your packages and functions with this in mind.
