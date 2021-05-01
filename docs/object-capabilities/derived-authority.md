@@ -12,7 +12,7 @@
 > * [ ] toc stuff and linking
 
 Any interesting program will need to interact with the outside world by using operating system concepts, like accessing the network or the file system, or by creating and communicating with other programs.
-The operating system has granted the right to do so to the program at startup (but it might do some checks at runtime, for example controlling access to a file). This is called *ambient authority*.
+The operating system has granted the right to do so to the program at startup (but it might do some checks at runtime, for example controlling access to a file). This is called __ambient authority__.
 
 The operating system has no concept of how our program is composed inside, and it knows nothing about Pony specific concepts in particular. Pony requires operations which interact with the system
 to be authorized, and allows us to restrict and delegate this authority inside our program.
@@ -51,7 +51,7 @@ actor Main
     try Connect(env.out, env.root as AmbientAuth) end
 ```
 
-The Main actor authorizes the Connect actor by passing the ambient authority token on to it. This token is not forgeable since the AmbientAuth constructor is private—only the runtime glue code
+The Main actor authorizes the Connect actor by passing the ambient authority token on to it. This token is not forgeable since the `AmbientAuth` constructor is private—only the runtime glue code
 can create the one and only instance.
 
 The Connect actor uses this authority when it creates a TCP connection:
@@ -95,7 +95,7 @@ actor Main
 ```
 
 Now we are sure it cannot access the filesystem or listen on a TCP or UDP port. This is possible
-because there is a TCPConnectAuth constructor which accepts the AmbientAuth.
+because there is a `TCPConnectAuth` constructor which accepts the AmbientAuth.
 
 You can see this pattern over and over in the standard library.
 
