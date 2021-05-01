@@ -1,13 +1,3 @@
----
-title: "Derived authority"
-section: "Derived authority"
-menu:
-  toc:
-    parent: "object-capabilities"
-    weight: 10
-toc: true
----
-
 ## [Plan]
 
 * demonstrate basic use in combination with file system access etc.
