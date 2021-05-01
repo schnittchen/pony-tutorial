@@ -66,7 +66,7 @@ can create the one and only instance).
 
 The Connect actor uses this authority when it creates a TCP connection:
 
-```
+```pony
 TCPConnection(auth, MyTCPConnectionNotify(out), "example.com", "80")
 ```
 
@@ -86,13 +86,15 @@ Imagine we don't trust the `Connect` actor, so we don't want to provide it with 
 than needed. For example, there is no point in granting it filesystem access.
 
 The first parameter of the `TCPConnection` constructor has the type
-```
+
+```pony
 type TCPConnectionAuth is (AmbientAuth | NetAuth | TCPAuth | TCPConnectAuth)
 ```
+
 This looks like a nice hierarchy of authority, in order of decreasing privilege. We can pass
 a reduced authority to our `Connect` actor like this:
 
-```
+```pony
 actor Connect
   new create(out: OutStream, auth: TCPConnectionAuth) =>
     TCPConnection(auth, MyTCPConnectionNotify(out), "example.com", "80")
