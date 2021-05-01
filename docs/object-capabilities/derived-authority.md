@@ -1,15 +1,15 @@
-## [Plan]
+# Good title here
 
-* demonstrate basic use in combination with file system access etc.
-* show how a derived authority can be constructed
-* refer to the patterns for more complex scenarios
-
-## [TODO]
-
-* [ ] come up with a better title for the section
-* [ ] toc stuff and linking
-
-## Prelude [TODO remove h2]
+> ## [Plan]
+>
+> * demonstrate basic use in combination with file system access etc.
+> * show how a derived authority can be constructed
+> * refer to the patterns for more complex scenarios
+>
+> ## [TODO]
+>
+> * [ ] come up with a better title for the section
+> * [ ] toc stuff and linking
 
 Any interesting program will need to interact with the outside world through operating system concepts, like accessing the network or the file system, or creating and communicating with other programs.
 The operating system has given this right to the program at startup (but it might do some checks at runtime, for example controlling access to a file). This is called *ambient authority*.
