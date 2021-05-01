@@ -1,4 +1,4 @@
-# Good title here
+# Delegating and restricting authority
 
 > ## [Plan]
 >
@@ -66,7 +66,7 @@ actor holding the required authorization. If you look into the implementation of
 constructor, you will notice that the authorization is not even used beyond the declaration of the
 parameter.
 
-## Delegate authorization
+## Restrict, then delegate your authority
 
 In order to handle our own code and that of others more safely, and also to understand our code better,
 we want to split up the authority, and only grant the particular authority a piece of code actually
