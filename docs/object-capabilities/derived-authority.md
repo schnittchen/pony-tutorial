@@ -11,8 +11,8 @@
 > * [ ] come up with a better title for the section
 > * [ ] toc stuff and linking
 
-Any interesting program will need to interact with the outside world through operating system concepts, like accessing the network or the file system, or creating and communicating with other programs.
-The operating system has given this right to the program at startup (but it might do some checks at runtime, for example controlling access to a file). This is called *ambient authority*.
+Any interesting program will need to interact with the outside world by using operating system concepts, like accessing the network or the file system, or by creating and communicating with other programs.
+The operating system has granted the right to do so to the program at startup (but it might do some checks at runtime, for example controlling access to a file). This is called *ambient authority*.
 
 The operating system has no concept of how our program is composed inside, and it knows nothing about Pony specific concepts in particular. Pony requires operations which interact with the system
 to be authorized, and allows us to restrict and delegate this authority inside our program.
@@ -51,8 +51,8 @@ actor Main
     try Connect(env.out, env.root as AmbientAuth) end
 ```
 
-The Main actor authorizes the Connect actor by passing the ambient authority token on to it. This token is not forgeable since the AmbientAuth constructor is private (only the runtime glue code
-can create the one and only instance).
+The Main actor authorizes the Connect actor by passing the ambient authority token on to it. This token is not forgeable since the AmbientAuth constructor is private—only the runtime glue code
+can create the one and only instance.
 
 The Connect actor uses this authority when it creates a TCP connection:
 
@@ -69,7 +69,7 @@ parameter.
 ## Delegate authorization
 
 In order to handle our own code and that of others more safely, and also to understand our code better,
-we want to split the authority up, and only grant the particular authority a piece of code actually
+we want to split up the authority, and only grant the particular authority a piece of code actually
 requires.
 
 Imagine we don't trust the `Connect` actor, so we don't want to provide it with more authority
@@ -81,7 +81,7 @@ The first parameter of the `TCPConnection` constructor has the type
 type TCPConnectionAuth is (AmbientAuth | NetAuth | TCPAuth | TCPConnectAuth)
 ```
 
-This looks like a nice hierarchy of authority, in order of decreasing privilege. We can pass
+This looks like a nice hierarchy of authority, in order of decreasing rights. We can pass
 a reduced authority to our `Connect` actor like this:
 
 ```pony
@@ -94,7 +94,7 @@ actor Main
     try Connect(env.out, TCPConnectAuth(env.root as AmbientAuth)) end
 ```
 
-and we can be sure it cannot access the filesystem or listen on a TCP or UDP port. This is possible
+Now we are sure it cannot access the filesystem or listen on a TCP or UDP port. This is possible
 because there is a TCPConnectAuth constructor which accepts the AmbientAuth.
 
 You can see this pattern over and over in the standard library.
